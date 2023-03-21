@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
+
+    var todoDataList = arrayListOf("")
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -16,6 +19,11 @@ class MainActivity : AppCompatActivity() {
         // 뷰 객체 등록
         val editText = findViewById<EditText>(R.id.editText)
         val button = findViewById<Button>(R.id.button)
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView_todoList)
+
+        // RecyclerView Adapter 생성
+        val adapter = MyAdapter(todoDataList)
+
 
         // 버튼 온클릭 이벤트 등록
         button.setOnClickListener {
@@ -29,8 +37,11 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(baseContext, "Contents를 입력해주세요.", Toast.LENGTH_SHORT).show()
 
             } else {
-                // content 내용 출력
-                Toast.makeText(baseContext, contents, Toast.LENGTH_SHORT).show()
+                // todoDataList에 항목 추가
+                todoDataList.add(contents)
+
+                // todoDataList에 항목 추가
+                adapter.notifyDataSetChanged()
 
                 // editText 비우기
                 editText.setText("")
