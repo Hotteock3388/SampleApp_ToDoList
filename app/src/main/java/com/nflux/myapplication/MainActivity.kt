@@ -9,7 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
 
-    var todoDataList = arrayListOf("")
+    private var todoDataList = arrayListOf(
+        "To Do Content 1",
+        "To Do Content 2",
+        "To Do Content 3"
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -23,6 +27,11 @@ class MainActivity : AppCompatActivity() {
 
         // RecyclerView Adapter 생성
         val adapter = MyAdapter(todoDataList)
+
+        // RecyclerView 객체에 adapter 등록
+        recyclerView.adapter = adapter
+
+        adapter.notifyDataSetChanged()
 
 
         // 버튼 온클릭 이벤트 등록
