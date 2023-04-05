@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="indigo">#21396A</color>
+
+    <color name="black_ripple">#626262</color>
+
 </resources>
