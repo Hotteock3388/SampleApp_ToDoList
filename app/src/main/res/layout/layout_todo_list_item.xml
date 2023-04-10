@@ -1,27 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:background="@drawable/bg_todo_item"
-    android:clickable="true"
-    android:layout_marginTop="10dp"
-    android:layout_marginHorizontal="10dp"
-    android:elevation="6dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout>
 
+    <data>
+        <variable
+            name="data"
+            type="com.nflux.myapplication.ToDoItem" />
+        <variable
+            name="event"
+            type="com.nflux.myapplication.MyAdapter.MyViewHolder.RecyclerViewItemEvent" />
+    </data>
 
-
-    <TextView
-        android:id="@+id/textView_todo_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center|start"
-        android:paddingStart="15dp"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="40dp"
+        android:background="@drawable/bg_todo_item"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:elevation="6dp"
+        android:clickable="@{data.cleared? false : true}"
+        android:onClick="@{() -> event.onItemClick(data)}"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
 
+
+        <TextView
+            android:id="@+id/textView_todo_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:paddingStart="15dp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

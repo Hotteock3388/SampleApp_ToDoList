@@ -2,6 +2,7 @@ package com.nflux.myapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -19,12 +20,27 @@ class MainActivity : AppCompatActivity() {
         ToDoItem("To Do Content 3")
     )
 
-
-    private lateinit var toDoItemCountTextView : TextView
-
     val toDoItemCnt = MutableLiveData<Int>(0)
+    val clearedItemCnt = MutableLiveData<Int>(0)
 
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var adapter : MyAdapter
+
+    private val itemOnClickEvent = object : RecyclerViewItemEventListener() {
+        override fun onItemClick(data: ToDoItem) {
+            // 온클릭 이벤트 처리
+
+            if(!data.isCleared){
+                data.content = "[Cleared] ${data.content}"
+                data.isCleared = true
+                adapter.notifyDataSetChanged()
+                updateToDoItemCount()
+            }
+
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,17 +56,12 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
 
         // DataBinding을 사용할 경우 findViewById를 사용하여 객체를 등록하지 않아도 "binding.변환된ViewID"의 형태로 view에 접근 할 수 있습니다.
-//        val editText = findViewById<EditText>(R.id.editText)
-//        val button = findViewById<Button>(R.id.button)
-//        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView_todoList)
-
-//        toDoItemCountTextView = findViewById<TextView>(R.id.textView_toDoCount)
 
         // toDoItemCountTextView 업데이트
         updateToDoItemCount()
 
         // RecyclerView Adapter 생성
-        val adapter = MyAdapter(todoDataList)
+        adapter = MyAdapter(todoDataList, itemOnClickEvent)
 
         // RecyclerView 객체에 adapter 등록
         binding.recyclerViewTodoList.adapter = adapter
@@ -89,11 +100,13 @@ class MainActivity : AppCompatActivity() {
 
     // toDoItemCountTextView 업데이트
     private fun updateToDoItemCount(){
-        // MutableLiveData Type의 변수는 아래와 같은 코드로 값을 변경 할 수 있습니다.
-        // 변수.setValue(data) --> 변수.value = data (MainThread에서만 사용 가능하며, 빠르게 값이 변경됨)
-        // 변수.postValue(data) (어떤 Thread에서든 사용 할 수 있으나, 값이 변경되는데 시간이 조금 걸림)
 
-        // postValue 함수를 사용하여 DB/Network등 비동기 처리 작업 완료 후 결과값과 UI를 동기화하는데 사용 할 수 있습니다.
+        // ToDoItem.isCleared == true인 항목만 필터링
+        val clearedToDoList = todoDataList.filter {
+            it.isCleared
+        }
+
+        clearedItemCnt.value = clearedToDoList.size
         toDoItemCnt.value = todoDataList.size
     }
 }
