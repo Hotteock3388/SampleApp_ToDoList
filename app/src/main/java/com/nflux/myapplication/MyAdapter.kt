@@ -1,13 +1,14 @@
 package com.nflux.myapplication
 
 
+import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter(private val dataList: ArrayList<String>)
+class MyAdapter(private val dataList: ArrayList<ToDoItem>)
     : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -20,16 +21,29 @@ class MyAdapter(private val dataList: ArrayList<String>)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, itemPosition: Int) {
-        holder.bindItemStatusListItems(dataList[itemPosition])
+        holder.bind(dataList[itemPosition])
     }
 
     class MyViewHolder(view: View): RecyclerView.ViewHolder(view) {
 
-        fun bindItemStatusListItems(data: String){
+        fun bind(data: ToDoItem){
 
             val content = itemView.findViewById<TextView>(R.id.textView_todo_content)
 
-            content.text = data
+            content.text = data.content
+
+            itemView.setOnClickListener {
+
+                if(!data.isCleared){
+                    //To Do 목표 달성 -> TextView에 취소선 긋기
+                    content.paintFlags = content.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                }else{
+                    //To Do 목표 달성 취소
+                    content.paintFlags = 0
+                }
+
+                data.isCleared = !data.isCleared
+            }
 
         }
     }

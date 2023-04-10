@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 class MainActivity : AppCompatActivity() {
 
     private var todoDataList = arrayListOf(
-        "To Do Content 1",
-        "To Do Content 2",
-        "To Do Content 3"
+        ToDoItem("To Do Content 1"),
+        ToDoItem("To Do Content 2"),
+        ToDoItem("To Do Content 3")
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
             } else {
                 // todoDataList에 항목 추가
-                todoDataList.add(contents)
+                todoDataList.add(ToDoItem(contents))
 
                 // todoDataList에 항목 추가
                 adapter.notifyDataSetChanged()
